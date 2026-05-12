@@ -79,3 +79,20 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
+
+
+#!/bin/bash
+
+echo "meterpreter > sysinfo"
+echo "Computer        : WIN-LAB01"
+echo "OS              : Windows 10 Enterprise (10.0 Build 19044)."
+echo "Architecture    : x64"
+echo "System Language : en_US"
+echo "Domain          : WORKGROUP"
+echo "Logged On Users : 2"
+echo "Meterpreter     : x64/windows"
+
+echo ""
+echo "meterpreter > getuid"
+echo "Server username: NT AUTHORITY\\SYSTEM"
