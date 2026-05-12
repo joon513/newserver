@@ -1,0 +1,81 @@
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo apt --fix-broken install -y
+chmod +x cloudflared
+./cloudflared --version
+sudo mv cloudflared /usr/local/bin/
+
+sudo chmod +x /usr/local/bin/cloudflared
+cloudflared --version
+
+-------------------------------------------------
+  
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ptrace.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+int main(int argc, char *argv[]) {
+
+    if(argc != 2) {
+        printf("Usage: %s <pid>\n", argv[0]);
+        return 1;
+    }
+
+    pid_t pid = atoi(argv[1]);
+
+    if(ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
+        perror("ptrace");
+        return 1;
+    }
+
+    wait(NULL);
+
+    printf("Attached to PID: %d\n", pid);
+
+    ptrace(PTRACE_DETACH, pid, NULL, NULL);
+
+    return 0;
+}
+
+-------------------------------------
+  
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ptrace.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/user.h>
+#include <unistd.h>
+
+int main(int argc, char *argv[]) {
+
+    if(argc != 2) {
+        printf("Usage: %s <pid>\n", argv[0]);
+        return 1;
+    }
+
+    pid_t pid = atoi(argv[1]);
+    struct user_regs_struct regs;
+
+    ptrace(PTRACE_ATTACH, pid, NULL, NULL);
+
+    wait(NULL);
+
+    ptrace(PTRACE_GETREGS, pid, NULL, &regs);
+
+    printf("Original RIP: 0x%llx\n",
+           (unsigned long long)regs.rip);
+
+    regs.rip += 2;
+
+    ptrace(PTRACE_SETREGS, pid, NULL, &regs);
+
+    printf("Modified RIP: 0x%llx\n",
+           (unsigned long long)regs.rip);
+
+    ptrace(PTRACE_DETACH, pid, NULL, NULL);
+
+    return 0;
+}
