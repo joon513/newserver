@@ -1,0 +1,94 @@
+# Cybersecurity Lab Commands Reference (Authorized Labs Only)
+
+## Question 1(a) – Base64 Decode
+```bash
+# Decode Base64 string
+echo "SGVsbG8gV29ybGQ=" | base64 -d
+```
+
+---
+
+## Question 1(b) – Traffic Capture Analysis
+```bash
+# Start Wireshark
+wireshark
+
+# Common filters
+http
+
+tcp.port == 80
+```
+
+---
+
+## Question 2(a) – IPTables Allow SSH Only
+```bash
+sudo iptables -F
+sudo iptables -P INPUT DROP
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+```
+
+---
+
+## Question 2(b) – Nmap Scan
+```bash
+# Basic scan
+nmap <target-ip>
+
+# Service detection
+nmap -sV <target-ip>
+
+# OS detection
+sudo nmap -O <target-ip>
+```
+
+---
+
+## Question 3(a) – Linux User Management
+```bash
+# Add user
+sudo useradd testuser
+
+# Set password
+sudo passwd testuser
+
+# Delete user
+sudo userdel testuser
+```
+
+---
+
+## Question 3(b) – File Permissions
+```bash
+# Change permissions
+chmod 755 filename
+
+# Change ownership
+sudo chown user:user filename
+```
+
+---
+
+## Question 4(a) – Hash Generation
+```bash
+# MD5
+md5sum file.txt
+
+# SHA256
+sha256sum file.txt
+```
+
+---
+
+## Question 4(b) – Network Information
+```bash
+# IP address
+ip addr
+
+# Routing table
+route -n
+
+# Active connections
+netstat -tulnp
+```
